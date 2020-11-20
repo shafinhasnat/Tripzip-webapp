@@ -5,12 +5,13 @@ import "../../App.css";
 import { firebaseFacebook } from "../../actions/authAction";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
+import Cookies from "js-cookie";
 const LoginFacebook = (props) => {
   const history = useHistory();
   const handleLogin = () => {
     const provider = new firebase.auth.FacebookAuthProvider();
     // console.log(provider)
-    provider.addScope("user_birthday");
+    provider.addScope("user_birthday, user_gender");
     // provider.addScope("user_id");
     fire
       .auth()
@@ -20,7 +21,11 @@ const LoginFacebook = (props) => {
           birthday: res.additionalUserInfo.profile.birthday,
           gender: res.additionalUserInfo.profile.gender,
         };
-        console.log("=========>", additionalData, res);
+
+        // console.log("=========>", res.additionalUserInfo);
+        Cookies.set("accessToken", res.credential.accessToken);
+        Cookies.set("birthday", res.additionalUserInfo.profile.birthday);
+        Cookies.set("gender", res.additionalUserInfo.profile.gender);
       });
     props.firebaseFacebook();
     history.push("/profile");

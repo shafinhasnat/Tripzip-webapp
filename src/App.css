@@ -10,3 +10,6 @@
 .disabled-link {
   pointer-events: none;
 }
+body::-webkit-scrollbar {
+  display: none;
+}
