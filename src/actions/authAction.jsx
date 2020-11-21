@@ -86,3 +86,12 @@ export const logout = () => {
       });
   };
 };
+export const locationModal = (payload) => {
+  return { type: "LOCATION_MODAL", payload };
+};
+export const professionModal = (payload) => {
+  return { type: "PROFESSION_MODAL", payload };
+};
+export const mottoModal = (payload) => {
+  return { type: "MOTTO_MODAL", payload };
+};

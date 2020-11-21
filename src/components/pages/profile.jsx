@@ -5,12 +5,31 @@ import { useHistory } from "react-router-dom";
 import "../static/profile.css";
 import CreateIcon from "@material-ui/icons/Create";
 import ProfileStrength from "./../common/profileStrength";
+import {
+  locationModal,
+  professionModal,
+  mottoModal,
+} from "./../../actions/authAction";
+import LocationModal from "./../common/profile_modal/locationModal";
+import ProfessionModal from "./../common/profile_modal/professionModal";
+import MottoModal from "./../common/profile_modal/mottoModal";
 const Profile = (props) => {
   const history = useHistory();
   const onLogout = () => {
     console.log("logout pressed");
     props.logout();
     history.push("/");
+  };
+  const openModal = (a) => {
+    console.log(a);
+    if (a === "profession") {
+      console.log(props.isOpen.professionModal);
+      props.professionModal(true);
+    } else if (a === "location") {
+      props.locationModal(true);
+    } else if (a === "motto") {
+      props.mottoModal(true);
+    }
   };
   const {
     name,
@@ -116,9 +135,20 @@ const Profile = (props) => {
                       {location ? (
                         location
                       ) : (
-                        <button className="btn btn-light btn-sm rounded-pill add-button">
-                          Add+
-                        </button>
+                        <div>
+                          <button
+                            className="btn btn-light btn-sm rounded-pill add-button"
+                            onClick={() => openModal("location")}
+                          >
+                            Add+
+                          </button>
+                          <LocationModal
+                            isOpen={
+                              props.isOpen ? props.isOpen.locationModal : false
+                            }
+                            content="location modal"
+                          />
+                        </div>
                       )}
                     </td>
                   </tr>
@@ -128,9 +158,22 @@ const Profile = (props) => {
                       {profession ? (
                         profession
                       ) : (
-                        <button className="btn btn-light btn-sm rounded-pill add-button">
-                          Add+
-                        </button>
+                        <div>
+                          <button
+                            className="btn btn-light btn-sm rounded-pill add-button"
+                            onClick={() => openModal("profession")}
+                          >
+                            Add+
+                          </button>
+                          <ProfessionModal
+                            isOpen={
+                              props.isOpen
+                                ? props.isOpen.professionModal
+                                : false
+                            }
+                            content="profession modal"
+                          />
+                        </div>
                       )}
                     </td>
                   </tr>
@@ -152,9 +195,20 @@ const Profile = (props) => {
                       {motto ? (
                         motto
                       ) : (
-                        <button className="btn btn-light btn-sm rounded-pill add-button">
-                          Add+
-                        </button>
+                        <div>
+                          <button
+                            className="btn btn-light btn-sm rounded-pill add-button"
+                            onClick={() => openModal("motto")}
+                          >
+                            Add+
+                          </button>
+                          <MottoModal
+                            isOpen={
+                              props.isOpen ? props.isOpen.mottoModal : false
+                            }
+                            content="motto modal"
+                          />
+                        </div>
                       )}
                     </td>
                   </tr>
@@ -196,14 +250,19 @@ const Profile = (props) => {
   );
 };
 const mapStateToProps = (state) => {
+  console.log(state.isOpen);
   return {
     data: state.userInfo,
     auth: state.auth,
+    isOpen: state.profileModal,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(logout()),
+    locationModal: (payload) => dispatch(locationModal(payload)),
+    professionModal: (payload) => dispatch(professionModal(payload)),
+    mottoModal: (payload) => dispatch(mottoModal(payload)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
