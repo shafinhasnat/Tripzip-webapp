@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import CancelIcon from "@material-ui/icons/Cancel";
-import FbLogin from './../utils/fbLogin';
-import LoginFacebook from './../utils/loginFacebook';
+import FbLogin from "../utils/fbLogin";
+import LoginFacebook from "../utils/loginFacebook";
+import Navbar from "./navbar";
 const customStyles = {
   overlay: {
     position: "fixed",
@@ -20,11 +21,11 @@ const customStyles = {
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     backgroundColor: "white",
-    width:"50%",
-    hight:"50%"
+    width: "100%",
+    height: "100%",
   },
 };
-const ModalMarkup = (props) => {
+const modalMarkup = (props) => {
   return (
     <div>
       <Modal
@@ -35,15 +36,17 @@ const ModalMarkup = (props) => {
         <div className="cross">
           <CancelIcon
             fontSize="large"
-            style={{ color: "#9a0036", float:"right" }}
+            style={{ color: "#9a0036", float: "right" }}
             onClick={props.closeModal}
           />
         </div>
-        <div style={{padding:"60px", display:"flex",justifyContent:"center"}}>
-            <LoginFacebook/>
+        <div
+          style={{ padding: "60px", display: "flex", justifyContent: "center" }}
+        >
+          {props.content}
         </div>
       </Modal>
     </div>
   );
 };
-export default ModalMarkup;
+export default modalMarkup;

@@ -1,7 +1,7 @@
 import React from "react";
 import firebase from "firebase";
 import fire from "./../../fire";
-import "../../App.css";
+import "../static/login.css";
 import { firebaseFacebook } from "../../actions/authAction";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -17,12 +17,7 @@ const LoginFacebook = (props) => {
       .auth()
       .signInWithPopup(provider)
       .then((res) => {
-        const additionalData = {
-          birthday: res.additionalUserInfo.profile.birthday,
-          gender: res.additionalUserInfo.profile.gender,
-        };
-
-        // console.log("=========>", res.additionalUserInfo);
+        console.log("=========>", res);
         Cookies.set("accessToken", res.credential.accessToken);
         Cookies.set("birthday", res.additionalUserInfo.profile.birthday);
         Cookies.set("gender", res.additionalUserInfo.profile.gender);
@@ -32,9 +27,12 @@ const LoginFacebook = (props) => {
   };
 
   return (
-    <button className="btn btn-primary facebook-button" onClick={handleLogin}>
-      Login with Facebook
-    </button>
+    <React.Fragment>
+      <h1 className="title-login">Login</h1>
+      <button className="btn btn-primary facebook-button" onClick={handleLogin}>
+        Login with Facebook
+      </button>
+    </React.Fragment>
   );
 };
 const mapStateToProps = (state) => {

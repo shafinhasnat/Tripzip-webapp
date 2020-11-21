@@ -1,0 +1,15 @@
+.facebook-button {
+  background-color: #3b5998;
+  color: white;
+  border: none;
+  padding: 15px;
+  width: 20%;
+  position: absolute;
+  top: 50%;
+  border-radius: 20px;
+}
+.title-login {
+  color: rgba(153, 123, 198, 1);
+  position: absolute;
+  top: 40%;
+}

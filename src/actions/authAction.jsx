@@ -55,13 +55,20 @@ export const firebaseFacebook = () => {
               gender: Cookies.get("gender"),
             };
             // console.log("----555------>", userData);
-            dispatch(setUserState(userData));
+            axios.post("http://127.0.0.1:5000/signin", userData).then((res) => {
+              // console.log(res);
+            });
+            axios
+              .get(`http://127.0.0.1:5000/u/${user.providerData[0].uid}`)
+              .then((res) => {
+                // console.log("get===>", res.data);
+                dispatch(setUserState(res.data));
+              });
           });
       }
     });
   };
 };
-// https://graph.facebook.com/3512084825574234?fields=id,name&access_token=EAAj7TMwb7D8BAJRRFf2jAVLJj8cH0ohxvC6TVTLZCX0kKZCAkq0WwXUQgyqXdmnAaLLv22ZArh2gWgX7gb88CNnZC4MIvaUIlwj0C8PfSEZBeE12qCw3nk3MzrwoqgPiuYVuAolZAyBhv5sZAwqZBpxwKLuxYxJP5TZB4EgE4RknxdHlzRKfZBNnWWp2cA5ZAwHY1gZD
 export const logout = () => {
   return (dispatch) => {
     fire
