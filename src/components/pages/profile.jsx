@@ -5,14 +5,11 @@ import { useHistory } from "react-router-dom";
 import "../static/profile.css";
 import CreateIcon from "@material-ui/icons/Create";
 import ProfileStrength from "./../common/profileStrength";
-import {
-  locationModal,
-  professionModal,
-  mottoModal,
-} from "./../../actions/authAction";
-import LocationModal from "./../common/profile_modal/locationModal";
-import ProfessionModal from "./../common/profile_modal/professionModal";
-import MottoModal from "./../common/profile_modal/mottoModal";
+import ToggleProfileModal from "./../common/profile_modal/toggleProfileModal";
+import { setUserState, modal } from "./../../actions/authAction";
+import Form from "./../common/profile_modal/form";
+import axios from "axios";
+
 const Profile = (props) => {
   const history = useHistory();
   const onLogout = () => {
@@ -20,16 +17,19 @@ const Profile = (props) => {
     props.logout();
     history.push("/");
   };
-  const openModal = (a) => {
-    console.log(a);
-    if (a === "profession") {
-      console.log(props.isOpen.professionModal);
-      props.professionModal(true);
-    } else if (a === "location") {
-      props.locationModal(true);
-    } else if (a === "motto") {
-      props.mottoModal(true);
-    }
+  const submitState = (e) => {
+    e.preventDefault();
+    const userData = { ...props.data };
+    userData[e.target[0].id] = e.target[0].value;
+    console.log(e.target[0].value, e.target[0].id);
+    props.setUserState(userData);
+  };
+  const handleSubmit = (e) => {
+    const userData = { ...props.data };
+    // console.log(userData.uid);
+    axios
+      .put(`http://127.0.0.1:5000/u/${userData.uid}`, userData)
+      .then((res) => console.log(res));
   };
   const {
     name,
@@ -41,6 +41,7 @@ const Profile = (props) => {
     interest,
     profession,
     motto,
+    social,
   } = props.data;
   return (
     <div>
@@ -111,9 +112,19 @@ const Profile = (props) => {
                       {birthday ? (
                         birthday
                       ) : (
-                        <button className="btn btn-light btn-sm rounded-pill add-button">
-                          Add+
-                        </button>
+                        <ToggleProfileModal
+                          modalType="birthday"
+                          isOpen={
+                            props.isOpen ? props.isOpen.birthdayModal : false
+                          }
+                          content={
+                            <Form
+                              id="location"
+                              onSubmit={submitState}
+                              value={location}
+                            />
+                          }
+                        />
                       )}
                     </td>
                   </tr>
@@ -123,9 +134,19 @@ const Profile = (props) => {
                       {gender ? (
                         gender
                       ) : (
-                        <button className="btn btn-light btn-sm rounded-pill add-button">
-                          Add+
-                        </button>
+                        <ToggleProfileModal
+                          modalType="gender"
+                          isOpen={
+                            props.isOpen ? props.isOpen.genderModal : false
+                          }
+                          content={
+                            <Form
+                              id="gender"
+                              onSubmit={submitState}
+                              value={gender}
+                            />
+                          }
+                        />
                       )}
                     </td>
                   </tr>
@@ -135,20 +156,19 @@ const Profile = (props) => {
                       {location ? (
                         location
                       ) : (
-                        <div>
-                          <button
-                            className="btn btn-light btn-sm rounded-pill add-button"
-                            onClick={() => openModal("location")}
-                          >
-                            Add+
-                          </button>
-                          <LocationModal
-                            isOpen={
-                              props.isOpen ? props.isOpen.locationModal : false
-                            }
-                            content="location modal"
-                          />
-                        </div>
+                        <ToggleProfileModal
+                          modalType="location"
+                          isOpen={
+                            props.isOpen ? props.isOpen.locationModal : false
+                          }
+                          content={
+                            <Form
+                              id="location"
+                              onSubmit={submitState}
+                              value={location}
+                            />
+                          }
+                        />
                       )}
                     </td>
                   </tr>
@@ -158,22 +178,19 @@ const Profile = (props) => {
                       {profession ? (
                         profession
                       ) : (
-                        <div>
-                          <button
-                            className="btn btn-light btn-sm rounded-pill add-button"
-                            onClick={() => openModal("profession")}
-                          >
-                            Add+
-                          </button>
-                          <ProfessionModal
-                            isOpen={
-                              props.isOpen
-                                ? props.isOpen.professionModal
-                                : false
-                            }
-                            content="profession modal"
-                          />
-                        </div>
+                        <ToggleProfileModal
+                          modalType="profession"
+                          isOpen={
+                            props.isOpen ? props.isOpen.professionModal : false
+                          }
+                          content={
+                            <Form
+                              id="profession"
+                              onSubmit={submitState}
+                              value={profession}
+                            />
+                          }
+                        />
                       )}
                     </td>
                   </tr>
@@ -183,9 +200,12 @@ const Profile = (props) => {
                       {interest ? (
                         interest
                       ) : (
-                        <button className="btn btn-light btn-sm rounded-pill add-button">
-                          Add+
-                        </button>
+                        <ToggleProfileModal
+                          modalType="interest"
+                          isOpen={
+                            props.isOpen ? props.isOpen.interestModal : false
+                          }
+                        />
                       )}
                     </td>
                   </tr>
@@ -195,20 +215,19 @@ const Profile = (props) => {
                       {motto ? (
                         motto
                       ) : (
-                        <div>
-                          <button
-                            className="btn btn-light btn-sm rounded-pill add-button"
-                            onClick={() => openModal("motto")}
-                          >
-                            Add+
-                          </button>
-                          <MottoModal
-                            isOpen={
-                              props.isOpen ? props.isOpen.mottoModal : false
-                            }
-                            content="motto modal"
-                          />
-                        </div>
+                        <ToggleProfileModal
+                          modalType="motto"
+                          isOpen={
+                            props.isOpen ? props.isOpen.mottoModal : false
+                          }
+                          content={
+                            <Form
+                              id="motto"
+                              onSubmit={submitState}
+                              value={motto}
+                            />
+                          }
+                        />
                       )}
                     </td>
                   </tr>
@@ -218,27 +237,50 @@ const Profile = (props) => {
                       {email ? (
                         email
                       ) : (
-                        <button className="btn btn-light btn-sm rounded-pill add-button">
-                          Add+
-                        </button>
+                        <ToggleProfileModal
+                          modalType="email"
+                          isOpen={
+                            props.isOpen ? props.isOpen.emailModal : false
+                          }
+                          content={
+                            <Form
+                              id="email"
+                              onSubmit={submitState}
+                              value={email}
+                            />
+                          }
+                        />
                       )}
                     </td>
                   </tr>
                   <tr>
                     <td className="table-title">Social Media Links</td>
                     <td>
-                      {location ? (
-                        location
+                      {social ? (
+                        social
                       ) : (
-                        <button className="btn btn-light btn-sm rounded-pill add-button">
-                          Add+
-                        </button>
+                        <ToggleProfileModal
+                          modalType="social"
+                          isOpen={
+                            props.isOpen ? props.isOpen.socialModal : false
+                          }
+                          content={
+                            <Form
+                              id="social"
+                              onSubmit={submitState}
+                              value={social}
+                            />
+                          }
+                        />
                       )}
                     </td>
                   </tr>
                 </table>
 
-                <button className="btn btn-light rounded-pill submit-button">
+                <button
+                  className="btn btn-light rounded-pill submit-button"
+                  onClick={handleSubmit}
+                >
                   Save
                 </button>
               </div>
@@ -250,19 +292,16 @@ const Profile = (props) => {
   );
 };
 const mapStateToProps = (state) => {
-  console.log(state.isOpen);
   return {
     data: state.userInfo,
-    auth: state.auth,
     isOpen: state.profileModal,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(logout()),
-    locationModal: (payload) => dispatch(locationModal(payload)),
-    professionModal: (payload) => dispatch(professionModal(payload)),
-    mottoModal: (payload) => dispatch(mottoModal(payload)),
+    setUserState: (payload) => dispatch(setUserState(payload)),
+    modal: (a, payload) => dispatch(modal(a, payload)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

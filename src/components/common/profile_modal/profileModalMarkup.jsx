@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import CancelIcon from "@material-ui/icons/Cancel";
+import { connect } from "react-redux";
+import { modal } from "./../../../actions/authAction";
+
 const customStyles = {
   overlay: {
     position: "fixed",
@@ -23,6 +26,9 @@ const customStyles = {
   },
 };
 const ProfileModalMarkup = (props) => {
+  const closeModal = (modalType) => {
+    props.modal(modalType, false);
+  };
   return (
     <div>
       <Modal
@@ -34,7 +40,7 @@ const ProfileModalMarkup = (props) => {
           <CancelIcon
             fontSize="large"
             style={{ color: "#9a0036", float: "right" }}
-            onClick={props.closeModal}
+            onClick={() => closeModal(props.modalType)}
           />
         </div>
         <div
@@ -46,4 +52,10 @@ const ProfileModalMarkup = (props) => {
     </div>
   );
 };
-export default ProfileModalMarkup;
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    modal: (a, payload) => dispatch(modal(a, payload)),
+  };
+};
+export default connect(null, mapDispatchToProps)(ProfileModalMarkup);

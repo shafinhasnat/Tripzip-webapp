@@ -5,39 +5,20 @@ import Cookies from "js-cookie";
 export const signinModal = (payload) => {
   return { type: "SIGNIN_MODAL", payload };
 };
-export const fetchUserInfo = (response) => {
-  return (dispatch) => {
-    try {
-      console.log(response);
-      const { id, name, picture, gender, birthday, email } = response;
-      const userData = {
-        uid: id,
-        name,
-        gender,
-        birthday,
-        email,
-        image: picture.data.url,
-      };
-      axios.post("http://127.0.0.1:5000/signin", userData).then((res) => {});
-      axios.get(`http://127.0.0.1:5000/u/${id}`).then((res) => {
-        dispatch(setUserState(res.data));
-      });
-    } catch {
-      console.log("NOT DONE");
-    }
-  };
-};
 export const setUserState = (payload) => {
   return { type: "SET_USER_STATE", payload };
 };
 export const logoutState = (payload) => {
   return { type: "LOGOUT_USER", payload };
 };
-
+export const loading = (payload) => {
+  return { type: "LOADING", payload };
+};
 export const firebaseFacebook = () => {
   return (dispatch) => {
     fire.auth().onAuthStateChanged((user) => {
       if (user) {
+        dispatch(loading(true));
         const accessToken = Cookies.get("accessToken");
         axios
           .get(
@@ -63,9 +44,11 @@ export const firebaseFacebook = () => {
               .then((res) => {
                 // console.log("get===>", res.data);
                 dispatch(setUserState(res.data));
+                dispatch(loading(false));
               });
           });
       }
+      // dispatch(loading(false));
     });
   };
 };
@@ -86,12 +69,25 @@ export const logout = () => {
       });
   };
 };
-export const locationModal = (payload) => {
-  return { type: "LOCATION_MODAL", payload };
+
+export const modal = (a, payload) => {
+  switch (a) {
+    case "birthday":
+      return { type: "BIRTHDAY_MODAL", payload };
+    case "gender":
+      return { type: "GENDER_MODAL", payload };
+    case "location":
+      return { type: "LOCATION_MODAL", payload };
+    case "profession":
+      return { type: "PROFESSION_MODAL", payload };
+    case "interest":
+      return { type: "INTEREST_MODAL", payload };
+    case "motto":
+      return { type: "MOTTO_MODAL", payload };
+    case "email":
+      return { type: "EMAIL_MODAL", payload };
+    case "social":
+      return { type: "SOCIAL_MODAL", payload };
+  }
 };
-export const professionModal = (payload) => {
-  return { type: "PROFESSION_MODAL", payload };
-};
-export const mottoModal = (payload) => {
-  return { type: "MOTTO_MODAL", payload };
-};
+export const putData = () => {};

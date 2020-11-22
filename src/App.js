@@ -5,16 +5,17 @@ import Profile from './components/pages/profile';
 import Navbar from "./components/common/navbar";
 import Index from './components/pages/index';
 import Mingle from './components/pages/mingle';
-import { firebaseFacebook } from './actions/authAction';
+import { firebaseFacebook, loading } from './actions/authAction';
 import { connect } from 'react-redux';
 import React, { useEffect } from 'react';
+import Loading from "./components/common/loading";
 function App(props) {
   useEffect(()=>{
     console.log("laoa");
     props.firebaseFacebook()
   },[])
   return (
-    <div className="container">
+      props.isLoading?<Loading/>: <div className="container">
       <Navbar/>
       <Switch>
         <Route path="/profile" component={Profile}/>
@@ -22,11 +23,17 @@ function App(props) {
         <Route path="/" component={Index} />
       </Switch>
     </div>
+      
+   
   );
 }
+const mapStateToProps = (state) => {
+  return { isLoading: state.isLoading };
+};
 const mapDispatchToProps=(dispatch)=>{
     return{
-        firebaseFacebook: ()=>dispatch(firebaseFacebook())
+        firebaseFacebook: ()=>dispatch(firebaseFacebook()),
+        loading: (payload)=>dispatch(loading(payload))
     }
 }
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

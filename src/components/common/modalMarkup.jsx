@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-modal";
 import CancelIcon from "@material-ui/icons/Cancel";
-import FbLogin from "../utils/fbLogin";
-import LoginFacebook from "../utils/loginFacebook";
-import Navbar from "./navbar";
 const customStyles = {
   overlay: {
     position: "fixed",

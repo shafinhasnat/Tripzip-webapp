@@ -56,3 +56,16 @@ td {
   bottom: 30px;
   right: 30px;
 }
+.form-style {
+  outline: 0;
+  width: 50%;
+  position: absolute;
+  top: 40%;
+  left: 25%;
+  border-width: 0 0 1px;
+}
+.form-style:focus {
+  /* border: none; */
+  border-width: 0 0 1px;
+  border-color: blue;
+}
