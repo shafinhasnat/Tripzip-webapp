@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import CancelIcon from "@material-ui/icons/Cancel";
+import CloseIcon from "@material-ui/icons/Close";
 import { connect } from "react-redux";
 import { modal } from "./../../../actions/authAction";
 
@@ -37,7 +37,7 @@ const ProfileModalMarkup = (props) => {
         contentLabel="Example Modal"
       >
         <div className="cross">
-          <CancelIcon
+          <CloseIcon
             fontSize="large"
             style={{ color: "#9a0036", float: "right" }}
             onClick={() => closeModal(props.modalType)}

@@ -3,14 +3,14 @@ import { connect } from "react-redux";
 const ProfileStrength = (props) => {
   const getProfileStrength = () => {
     const thing = Object.values(props.userInfo).filter((e) => e !== null);
-    const result = (thing.length * 100) / 12;
+    const result = (thing.length * 100) / 11;
     console.log(thing.length);
     return result;
   };
   return (
     <React.Fragment>
       <div style={{ padding: "0px 0px 5px 0px", fontWeight: "bold" }}>
-        Profile Strength
+        Profile Strength ({parseInt(getProfileStrength())}%)
       </div>
       <div
         id="outline"

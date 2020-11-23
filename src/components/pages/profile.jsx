@@ -6,9 +6,10 @@ import "../static/profile.css";
 import CreateIcon from "@material-ui/icons/Create";
 import ProfileStrength from "./../common/profileStrength";
 import ToggleProfileModal from "./../common/profile_modal/toggleProfileModal";
-import { setUserState, modal } from "./../../actions/authAction";
+import { setUserState, modal, loading } from "./../../actions/authAction";
 import Form from "./../common/profile_modal/form";
 import axios from "axios";
+import Select from "./../common/profile_modal/select";
 
 const Profile = (props) => {
   const history = useHistory();
@@ -26,10 +27,37 @@ const Profile = (props) => {
   };
   const handleSubmit = (e) => {
     const userData = { ...props.data };
+    props.loading(true);
+
     // console.log(userData.uid);
     axios
       .put(`http://127.0.0.1:5000/u/${userData.uid}`, userData)
       .then((res) => console.log(res));
+    props.loading(false);
+  };
+  const pill = () => {
+    const markup = (e) => {
+      return (
+        <span
+          className="badge badge-pill badge-secondary col"
+          style={{
+            margin: "0px 5px 0px 0px",
+            fontSize: ".8rem",
+            width: "20%",
+          }}
+        >
+          {e}
+        </span>
+      );
+    };
+    try {
+      return interest.map((e) => markup(e));
+    } catch {
+      return interest
+        .replace(/{|}/g, "")
+        .split(",")
+        .map((e) => markup(e));
+    }
   };
   const {
     name,
@@ -198,13 +226,15 @@ const Profile = (props) => {
                     <td className="table-title">Interest</td>
                     <td>
                       {interest ? (
-                        interest
+                        // interest.replace(/{|}/g, "").split(",")
+                        pill()
                       ) : (
                         <ToggleProfileModal
                           modalType="interest"
                           isOpen={
                             props.isOpen ? props.isOpen.interestModal : false
                           }
+                          content={<Select />}
                         />
                       )}
                     </td>
@@ -302,6 +332,7 @@ const mapDispatchToProps = (dispatch) => {
     logout: () => dispatch(logout()),
     setUserState: (payload) => dispatch(setUserState(payload)),
     modal: (a, payload) => dispatch(modal(a, payload)),
+    loading: (payload) => dispatch(loading(payload)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
